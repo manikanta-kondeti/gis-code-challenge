@@ -17,16 +17,7 @@ Imagine you are a Software Developer at ally and you are presented that data. Yo
 
 ## Developing your solution:
 
-1. Please clone the repository to your local machine via:
-
-    ```
-    git clone https://github.com/allyapp/gis-code-challenge.git
-    ```
-
-    or download a zip archive of this repository [here](https://github.com/allyapp/gis-code-challenge/archive/master.zip).
-
-   **Important:** Do not fork this repository. Doing so will expose your solution
-   to other candidates!
+1. Please clone the repository to your local machine.
 
 2. Fulfill the given task.
 
