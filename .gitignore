@@ -1,0 +1,12 @@
+# IDEs and Editors
+.idea
+.project
+.pydevproject
+*.swp
+*.log
+# Compiled sources
+*.pyc
+
+
+
+.DS_Store
