@@ -26,3 +26,11 @@ Imagine you are a Software Developer at Door2Door and you are presented that dat
     Please submit your solutions in a form of publicly accessible git repository. Please make sure to submit the full git commit history with the project and please include instructions for testing and running your code.
 
     Alternatively, you can submit a zip archive of your project via email.
+
+
+# Solution to gis-code-challenge
+
+### webapp2 setup: 
+* pip install WebOb
+* pip install Paste
+* pip install webapp2
