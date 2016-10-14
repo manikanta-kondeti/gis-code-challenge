@@ -1,12 +1,35 @@
 import webapp2
 from paste import httpserver
+import jinja2
+import os
 
-class HelloWebapp2(webapp2.RequestHandler):
+JINJA_ENVIRONMENT = jinja2.Environment(
+    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
+    extensions=['jinja2.ext.autoescape'],
+    autoescape=True)
+
+
+class MapHandler(webapp2.RequestHandler):
     def get(self):
         self.response.write('Hello, webapp2!')
 
+
+
+class HomePage(webapp2.RequestHandler):
+    """
+        To handle post request, when the entity is approved or rejected
+    """
+    def get(self, term=None):
+        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        self.response.headers['Content-Type'] = 'text/html'
+
+        template = JINJA_ENVIRONMENT.get_template('index.html')
+        self.response.write(template.render({}))
+        return
+
 app = webapp2.WSGIApplication([
-    ('/', HelloWebapp2),
+    ('/', HomePage),
+    ('/', MapHandler)
 ], debug=True)
 
 def main():
