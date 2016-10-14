@@ -1,0 +1,27 @@
+We have 13 attributes in the given geojson data. 
+
+
+Intuition? or Trivial or Obvious? 
+ - To remove the data points or merge the data points inorder to extract the bus stops 
+
+
+What am I doing?
+    - Opened QGIS and added activity_points as layer.
+    - Running Queries: 
+        Eg: 
+            "speed" = 0 
+         AND "current_dominating_activity" = cda (given below)
+         AND "current_dominating_activity_confidence" > 60 
+         AND "previous_dominating_activity" = pda (given below)
+         AND "previous_dominating_activity_confidence" > 60
+        cda, pda can be {'in_vehicle', 'still', 'on_bicycle', 'on_foot'} - permutations(4c2) = 6 Queries
+    
+    - Observations:  
+        From above queries I found the following 
+          {on_foot, in_vehicle}  = 1 geopoint  (speed = 0, altitude = 0, bearing = 0)
+          {on_bicycle, in_vehicle} = 0 geopoint
+          {still, in_vehicle} = 3 geopoints(speed = 0, altitude = 0, bearing = 0)
+          {in_vehicle, still} = 3 geopoints (speed = 0, altitude = 0, bearning = 0)
+          {in_vehicle, on_foot} = 0
+          {in_vehicle, on_bicycle} = 0
+          We got 7 points from these queries.
