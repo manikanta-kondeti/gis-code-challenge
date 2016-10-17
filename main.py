@@ -2,7 +2,7 @@ import webapp2
 from paste import httpserver
 import jinja2
 import os
-from models.geojson_utils import GeoJson
+from models.utils import GeoJson
 from models.algorithm import Algorithm
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -13,11 +13,19 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 class ExtractBusStops(webapp2.RequestHandler):
     def get(self):
-        geojson_data = GeoJson()
-        geojson_data.read_contents("./data/activity_points.geojson")
-        geojson_data.features = Algorithm.extract_points_based_on_props(geojson_data.features)
-        print len(geojson_data.features)
-        self.response.write(str(geojson_data.features))
+        # Read and load activity points
+        activity_points = GeoJson()
+        activity_points.read_contents("./data/activity_points.geojson")
+
+        # Read and load routes
+        routes = GeoJson()
+        routes.read_contents("./data/routes.geojson")
+
+
+        activity_points.features = Algorithm.extract_points_based_on_props(activity_points.features)
+        activity_points.features = Algorithm.remove_outliers(activity_points.features, routes.features)
+
+        self.response.write(str(activity_points.features))
 
 
 

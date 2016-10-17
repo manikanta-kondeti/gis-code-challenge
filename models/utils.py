@@ -34,3 +34,17 @@ class GeoJson:
     def to_geojson(self):
         # Generate geojson with current attributes
         return
+
+class WKT:
+
+    def __init__(self):
+        return
+
+    @classmethod
+    def linestring_to_WKT(cls, linestring_coods):
+        wkt = "LINESTRING ("
+        coordinates_string = ""
+        for coods in linestring_coods:
+            coordinates_string = coordinates_string + " " + str(coods[0]) + " " + str(coods[1]) + ","
+
+        return "LINESTRING (" + coordinates_string[:-1] + ")"
