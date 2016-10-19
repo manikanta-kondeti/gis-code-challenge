@@ -25,7 +25,7 @@ class Algorithm:
         return filtered_features
 
     @classmethod
-    def remove_unintersected_points(self, point_objects, route_objects, buffer_distance=0.005):
+    def remove_unintersected_points(self, point_objects, route_objects, buffer_distance=0.0005):
         '''
         :param features:
         :return:

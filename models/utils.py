@@ -33,13 +33,12 @@ class GeoJson:
 
     def to_geojson(self):
         # Generate geojson with current attributes
-        new_geojson =  {
-            'type' : self.type,
-            'crs' : self.crs,
-            'features' : self.features
-        }
+        new_geojson =  {}
+        new_geojson["crs"] = self.crs
+        new_geojson["type"] = self.type
+        new_geojson["features"] = self.features
 
-        return new_geojson
+        return json.dumps(new_geojson)
 
 class WKT:
 
