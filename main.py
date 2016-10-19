@@ -23,9 +23,11 @@ class ExtractBusStops(webapp2.RequestHandler):
 
 
         activity_points.features = Algorithm.extract_points_based_on_props(activity_points.features)
-        activity_points.features = Algorithm.remove_outliers(activity_points.features, routes.features)
+        activity_points.features = Algorithm.remove_unintersected_points(activity_points.features, routes.features)
 
-        self.response.write(str(activity_points.features))
+        new_json = activity_points.to_geojson()
+
+        self.response.write(new_json)
 
 
 
