@@ -10,15 +10,17 @@ class Algorithm:
     def extract_points_based_on_props(self, features):
 
         '''
-        # High probable points:
-            previous_activity, current_activity = {in_vehicle, X} or {X, in_vehicle} --> X={on_foot, on_bicycle, still}
+        # High probable points based on intuition and detailed checking of attributes:
+            previous_activity, current_activity = {in_vehicle, X} or {X, in_vehicle} --> X={on_foot, on_bicycle, still} adn speed < 70
         '''
-        # Filter operation
+
         new_features_set1 = filter(lambda feature: feature['properties']['previous_dominating_activity'] == 'in_vehicle'
-                                    and feature['properties']['current_dominating_activity'] in ['still', 'on_foot', 'on_bicycle'],
+                                    and feature['properties']['current_dominating_activity'] in ['still', 'on_foot', 'on_bicyle', 'NULL']
+                                    and feature['properties']['speed'] < 70,
                                     features)
         new_features_set2 = filter(lambda feature: feature['properties']['current_dominating_activity'] == 'in_vehicle'
-                                    and feature['properties']['previous_dominating_activity'] in ['still', 'on_foot', 'on_bicycle'],
+                                    and feature['properties']['previous_dominating_activity'] in ['still', 'on_foot', 'on_bicycle', 'NULL']
+                                    and feature['properties']['speed'] < 70,
                                    features)
 
         filtered_features = new_features_set1 + new_features_set2
@@ -30,7 +32,7 @@ class Algorithm:
         :param features:
         :return: features
 
-        Useful:
+        Useful resources:
         http://pcjericks.github.io/py-gdalogr-cookbook/geometry.html#buffer-a-geometry
         http://pcjericks.github.io/py-gdalogr-cookbook/geometry.html#create-geometry-from-geojson
         '''

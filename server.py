@@ -12,7 +12,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 
-class WMSWebPage(webapp2.RequestHandler):
+class WebPageHandler(webapp2.RequestHandler):
     """
         To handle post request, when the entity is approved or rejected
     """
@@ -20,11 +20,12 @@ class WMSWebPage(webapp2.RequestHandler):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         self.response.headers['Content-Type'] = 'text/html'
 
-        # Routes
+        # Read Routes
         routes = GeoJson()
         routes.read_contents("./data/routes.geojson")
         routes_json = routes.to_geojson()
         print "Request being served...Please check this page http://localhost:8080/busstops"
+        # Read Activity points
         activity_points = GeoJson()
         activity_points.read_contents("./data/activity_points.geojson")
         activity_points.features = Algorithm.extract_points_based_on_props(activity_points.features)
@@ -48,21 +49,8 @@ class WMSWebPage(webapp2.RequestHandler):
         return
 
 
-class HomePage(webapp2.RequestHandler):
-    """
-        To handle post request, when the entity is approved or rejected
-    """
-    def get(self, term=None):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        self.response.headers['Content-Type'] = 'text/html'
-
-        template = JINJA_ENVIRONMENT.get_template('./views/index.html')
-        self.response.write(template.render({}))
-        return
-
-
 app = webapp2.WSGIApplication([
-    ('/busstops', WMSWebPage),
+    ('/busstops', WebPageHandler),
 ], debug=True)
 
 
