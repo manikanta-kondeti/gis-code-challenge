@@ -1,5 +1,5 @@
 from osgeo import ogr
-from models.utils import WKT
+from modules.utils import WKT
 
 class Algorithm:
 
@@ -27,7 +27,7 @@ class Algorithm:
         return filtered_features
 
     @classmethod
-    def remove_unintersected_points(self, point_objects, route_objects, buffer_distance=0.0005):
+    def remove_unintersected_points(self, point_objects, route_objects, buffer_distance=0.005):
         '''
         :param features:
         :return: features

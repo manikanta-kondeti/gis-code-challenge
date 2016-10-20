@@ -3,8 +3,8 @@ import webapp2
 from paste import httpserver
 import jinja2
 import os
-from models.utils import GeoJson
-from models.algorithm import Algorithm
+from modules.utils import GeoJson
+from modules.algorithm import Algorithm
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),

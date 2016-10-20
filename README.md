@@ -49,8 +49,30 @@ We have points(X,Y) and routes as Linestrings [ (X,Y) ]. Let us explore the poss
       * Routes : This file is given as input.
 
 ## Test: 
-* Open Algorithm.py, change attributes in method 1 or method 2.
+* Open models/Algorithm.py, Add your method or change the filtering conditions
 * Save the changes and restart the server.
 * Open http://localhost:8080/busstops to check the result.
 
 ** You can use print statements for debugging purposes.
+
+## Knowledge and insights on the data given:
+
+
+* Added all the vector data files(routes.json, activity_points.json and results.json from running above Algorithm) as vector layers in QGIS. Dots represented in Red color are the output from algorithm and green represents activity points.
+![alt tag](https://postimg.org/image/b4df5sipr/)
+
+* Also I have exported Dar es salaam busstops information from Goolge Maps as kml and converted into geojson. Added it as a layer to check the correlation between activity points and actual bus stops. Unfortunately I can not see any activity point(380) coincide with actual bus stops(10) from Google.
+
+![alt tag](https://postimg.org/image/c8mhosit3/)
+
+
+* However based on tweaking above buffered distance in step 2: I got various results
+  * buffer_distance = 0.0005   -> 43 points
+  * buffer_distace = 0.00005   -> 24 points.
+
+* Also in step-1 if we add speed < 70, 
+  * buffer_distance = 0.0005 and speed < 70 --> 6 points 
+  * buffer_distace = 0.005 and speed < 70 --> 14 points
+
+
+  
