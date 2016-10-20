@@ -1,6 +1,7 @@
 from osgeo import ogr
 from modules.utils import WKT
 
+
 class Algorithm:
 
     def __init__(self):
@@ -8,8 +9,9 @@ class Algorithm:
 
     @classmethod
     def extract_points_based_on_props(self, features):
-
         '''
+        :param features:
+        :return: features
         # High probable points based on intuition and detailed checking of attributes:
             previous_activity, current_activity = {in_vehicle, X} or {X, in_vehicle} --> X={on_foot, on_bicycle, still} adn speed < 70
         '''

@@ -9,7 +9,7 @@ git clone https://github.com/manikanta-kondeti/gis-code-challenge
 bash script.sh 
 python server.py
 
-Open http://localhost:8080/busstops to check the results.
+Open http://localhost:8080/extract_bus_stops to check the results(Check the console for logs and wait for more than 10sec)
 ```
 
 
@@ -51,7 +51,7 @@ We have points(X,Y) and routes as Linestrings [ (X,Y) ]. Let us explore the poss
 ## Test: 
 * Open models/Algorithm.py, Add your method or change the filtering conditions
 * Save the changes and restart the server.
-* Open http://localhost:8080/busstops to check the result.
+* Open http://localhost:8080/extract_bus_stops to check the result.
 
 ** You can use print statements for debugging purposes.
 

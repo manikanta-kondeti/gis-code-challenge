@@ -1,15 +1,5 @@
 import json
 
-'''
-Flow:
-    1. create an instace of an geojson class.
-    2. extract features and have a object variable.
-    3.
-
-Data cleaning techniques - Algorithm:
-    1. High probability points :
-        Based on attributes like pda, cda, pdac, cdac, speed, we can separate maximum probable points.
-'''
 
 class GeoJson:
 
