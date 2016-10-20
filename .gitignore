@@ -6,7 +6,9 @@
 *.log
 # Compiled sources
 *.pyc
-
+# OSM and other files
+*.osm
+*.osm.db
 
 
 .DS_Store

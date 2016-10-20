@@ -27,19 +27,20 @@
     </div>
 
     <div class="container">
-        <div style="border: 1px solid white; float: left;">
-            <div class="checkbox">
-                <label><input type="checkbox" value="" onclick="ToggleRoutes();" checked>Routes</label>
-            </div>
-            <div class="checkbox">
-                <label><input type="checkbox" value="" onclick="ToggleBusStops();" checked>Bus stops</label>
-            </div>
-        </div>
         <div id="input-output" class="row">
             <div class="col-sm-12 full-height">
                 <div id="map-container" class="full-height"></div>
             </div>
         </div>
+    </div>
+    <div class="container">
+        <h3>Legend</h3>
+        <p>Extracted Bus Stops from Algorithm ({{length_of_extracted_busstops}} out of 380)
+            <img src="http://cliparts.co/cliparts/dT4/oLp/dT4oLp7Ec.svg" width="30" height="50"  />
+        </p>
+        <p> Bus stops from Google Maps (10)
+            <img src="http://www.autogari.ro/images/news/9ipRr76iE.png" width="20" height="20"  />
+        </p>
     </div>
     <div class="container">
         <h3>Questions?</h3>
@@ -71,6 +72,8 @@
               var map;
               var routes_data = {{ routes_json|safe }};
               var busstops_data = {{ busstops_json|safe }};
+              var google_busstops_data = {{ google_busstops_json|safe }};
+
               var geojsonLayer;
               var Layers = [];
               var myStyle = {
@@ -107,6 +110,34 @@
                 return geojsonLayer;
               }
 
+              function GooglegetGeojsonLayer() {
+                 geojsonLayerGoogle = new L.GeoJSON(null, {
+                   style: myStyle,
+                   pointToLayer: function(feature, latlng) {
+                     var smallIcon =  L.icon({
+                      iconUrl: 'http://www.autogari.ro/images/news/9ipRr76iE.png',
+                      iconRetinaUrl: 'http://www.autogari.ro/images/news/9ipRr76iE.png',
+                      iconSize: [20, 20]
+                     });
+                     return L.marker(latlng, {icon: smallIcon});
+                   },
+                   onEachFeature: function (feature, layer) {
+                    if (feature.properties) {
+                      var popupString = '<div class="popup">';
+                      for (var k in feature.properties) {
+                        var v = feature.properties[k];
+                        popupString += k + ': ' + v + '<br />';
+                      }
+                      popupString += '</div>';
+                      layer.bindPopup(popupString, {
+                        maxHeight: 200
+                      });
+                    }
+                   }
+                });
+                return geojsonLayerGoogle;
+              }
+
               $(document).ready(function() {
 
                 L.mapbox.accessToken = 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6InRJMHZPZFUifQ.F4DMGoNgU3r2AWLY0Eni-w';
@@ -114,6 +145,8 @@
                 map.setView([37.92686, -96.76757], 4);
 
                 geojsonLayer = getGeojsonLayer();
+                googleGeojsonLayer = GooglegetGeojsonLayer();
+                googleGeojsonLayer.addData(JSON.parse(google_busstops_data))
                 geojsonLayer.addData(JSON.parse(busstops_data));
                 geojsonLayer.addData(JSON.parse(routes_data));
 
@@ -122,52 +155,10 @@
 
                 map.fitBounds(geojsonLayer.getBounds());
                 map.addLayer(geojsonLayer);
-
+                map.addLayer(googleGeojsonLayer)
+                geojsonLayer = null;
               });
 
-              function ToggleBusStops() {
-                    if (Layers.indexOf(busstops_data) != -1) {
-                        index = Layers.indexOf(busstops_data);
-                        Layers.splice(index, 1);
-                        RemoveFromMap(busstops_data);
-                        UpdateMap();
-                    }
-                    else {
-                        Layers.push(busstops_data);
-                        UpdateMap();
-                    }
-              }
-
-              function ToggleRoutes() {
-                    if (Layers.indexOf(routes_data) != -1) {
-                        index = Layers.indexOf(routes_data);
-                        Layers.splice(index, 1);
-                        RemoveFromMap(routes_data);
-                        UpdateMap();
-                    }
-                    else {
-                        Layers.push(routes_data);
-                        UpdateMap();
-                    }
-              }
-
-              function UpdateMap() {
-                console.log("Layers length " + Layers.length);
-                geojsonLayer = getGeojsonLayer();
-                for (var i=0; i<Layers.length; i++) {
-                    geojsonLayer.addData(JSON.parse(Layers[i]));
-                    map.fitBounds(geojsonLayer.getBounds());
-                    map.addLayer(geojsonLayer);
-                    //geojsonLayer = null;
-                }
-              }
-
-              function RemoveFromMap(data) {
-                    geojsonLayer.addData(JSON.parse(data));
-                    map.removeLayer(geojsonLayer);
-                    geojsonLayer = null;
-                    console.log("Layers length " + Layers.length);
-              }
 
     </script>
 </body>

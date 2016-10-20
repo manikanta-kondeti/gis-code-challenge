@@ -41,17 +41,32 @@ class WMSWebPage(webapp2.RequestHandler):
     def get(self, term=None):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         self.response.headers['Content-Type'] = 'text/html'
+
         # Routes
         routes = GeoJson()
         routes.read_contents("./data/routes.geojson")
         routes_json = routes.to_geojson()
+        print "Request being served...Please check this page http://localhost:8080/busstops"
+        activity_points = GeoJson()
+        activity_points.read_contents("./data/activity_points.geojson")
+        activity_points.features = Algorithm.extract_points_based_on_props(activity_points.features)
+        activity_points.features = Algorithm.remove_unintersected_points(activity_points.features, routes.features)
 
-        busstops = GeoJson()
-        busstops.read_contents("./data/output_24_5m.geojson")
-        busstops_json = busstops.to_geojson()
 
+        busstops_json = activity_points.to_geojson()
+
+        google_busstops = GeoJson()
+        google_busstops.read_contents("./data/bus_stops_from_google_maps")
+        google_busstops_json = google_busstops.to_geojson()
+        print "*** Successful ***", "\n"
         template = JINJA_ENVIRONMENT.get_template('./views/wms.html')
-        self.response.write(template.render({"routes_json" : json.dumps(routes_json), "busstops_json" : json.dumps(busstops_json)}))
+        self.response.write(template.render({
+                                            "routes_json" : json.dumps(routes_json),
+                                            "busstops_json" : json.dumps(busstops_json),
+                                            "google_busstops_json" : json.dumps(google_busstops_json),
+                                            "length_of_extracted_busstops" : json.dumps(len(activity_points.features))
+                        }))
+
         return
 
 
