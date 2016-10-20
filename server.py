@@ -12,28 +12,6 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 
-class ExtractBusStops(webapp2.RequestHandler):
-    def get(self):
-        # Read and load activity points
-        activity_points = GeoJson()
-        activity_points.read_contents("./data/activity_points.geojson")
-
-        # Read and load routes
-        routes = GeoJson()
-        routes.read_contents("./data/routes.geojson")
-
-
-        activity_points.features = Algorithm.remove_unintersected_points(activity_points.features, routes.features)
-        print "After removing unintersected points ", len(activity_points.features)
-        activity_points.features = Algorithm.extract_points_based_on_props(activity_points.features)
-
-
-        new_json = activity_points.to_geojson()
-        print len(activity_points.features)
-        self.response.write(new_json)
-
-
-
 class WMSWebPage(webapp2.RequestHandler):
     """
         To handle post request, when the entity is approved or rejected
@@ -84,9 +62,7 @@ class HomePage(webapp2.RequestHandler):
 
 
 app = webapp2.WSGIApplication([
-    ('/', HomePage),
     ('/busstops', WMSWebPage),
-    ('/extract', ExtractBusStops)
 ], debug=True)
 
 

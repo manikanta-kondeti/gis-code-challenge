@@ -3,8 +3,8 @@
     {% autoescape true %}
 <head>
     <title>GIS Code Challenge - Extracting Bus <stops></stops></title>
-    <meta name="keywords" content="GeoJSON Validation,GeoJSON Validator,GeoJSONLint,GeoJSON Lint,Validate GeoJSON">
-    <meta name="description" content="Validate your GeoJSON and display it on a map.">
+    <meta name="keywords" content="GIS CODE CHALLENGE">
+    <meta name="description" content="GIS Code Challenge.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js">
@@ -45,7 +45,7 @@
     <div class="container">
         <h3>Questions?</h3>
         <p>
-            Read the <a href="https://github.com/manikanta-kondeti/gis-code-challenge/blob/master/README.md">blog post</a> or check out the <a href="https://github.com/manikanta-kondeti/gis-code-challenge">source code</a>.
+            Read the <a href="https://github.com/manikanta-kondeti/gis-code-challenge/blob/master/README.md">Github Readme</a> or check out the <a href="https://github.com/manikanta-kondeti/gis-code-challenge">source code</a>.
         </p>
     </div>
     <div id="modal-message" class="modal">
@@ -70,95 +70,68 @@
     <script src="http://geojsonlint.com/static/js/sample-geojson.js"></script>
     <script>
               var map;
-              var routes_data = {{ routes_json|safe }};
-              var busstops_data = {{ busstops_json|safe }};
-              var google_busstops_data = {{ google_busstops_json|safe }};
+          var routes_data = {{ routes_json | safe }};
+          var busstops_data = {{ busstops_json | safe }};
+          var google_busstops_data = {{ google_busstops_json | safe }};
 
-              var geojsonLayer;
-              var Layers = [];
-              var myStyle = {
-                "color": "#ff7800",
-                "weight": 2,
-                "opacity": 0.65
-              };
+          var geojsonLayer;
+          var myStyle = {
+              "color": "#ff7800",
+              "weight": 2,
+              "opacity": 0.65
+          };
 
-              function getGeojsonLayer() {
-                 geojsonLayer = new L.GeoJSON(null, {
-                   style: myStyle,
-                   pointToLayer: function(feature, latlng) {
-                     var smallIcon =  L.icon({
-                      iconUrl: 'http://cliparts.co/cliparts/dT4/oLp/dT4oLp7Ec.svg',
-                      iconRetinaUrl: 'http://cliparts.co/cliparts/dT4/oLp/dT4oLp7Ec.svg',
-                      iconSize: [30, 50]
-                     });
-                     return L.marker(latlng, {icon: smallIcon});
-                   },
-                   onEachFeature: function (feature, layer) {
-                    if (feature.properties) {
-                      var popupString = '<div class="popup">';
-                      for (var k in feature.properties) {
-                        var v = feature.properties[k];
-                        popupString += k + ': ' + v + '<br />';
-                      }
-                      popupString += '</div>';
-                      layer.bindPopup(popupString, {
-                        maxHeight: 200
+          function getGeojsonLayer(image_url, width, height) {
+              geojsonLayer = new L.GeoJSON(null, {
+                  style: myStyle,
+                  pointToLayer: function(feature, latlng) {
+                      var smallIcon = L.icon({
+                          iconUrl: image_url,
+                          iconRetinaUrl: image_url,
+                          iconSize: [width, height]
                       });
-                    }
-                   }
-                });
-                return geojsonLayer;
-              }
-
-              function GooglegetGeojsonLayer() {
-                 geojsonLayerGoogle = new L.GeoJSON(null, {
-                   style: myStyle,
-                   pointToLayer: function(feature, latlng) {
-                     var smallIcon =  L.icon({
-                      iconUrl: 'http://www.autogari.ro/images/news/9ipRr76iE.png',
-                      iconRetinaUrl: 'http://www.autogari.ro/images/news/9ipRr76iE.png',
-                      iconSize: [20, 20]
-                     });
-                     return L.marker(latlng, {icon: smallIcon});
-                   },
-                   onEachFeature: function (feature, layer) {
-                    if (feature.properties) {
-                      var popupString = '<div class="popup">';
-                      for (var k in feature.properties) {
-                        var v = feature.properties[k];
-                        popupString += k + ': ' + v + '<br />';
-                      }
-                      popupString += '</div>';
-                      layer.bindPopup(popupString, {
-                        maxHeight: 200
+                      return L.marker(latlng, {
+                          icon: smallIcon
                       });
-                    }
-                   }
-                });
-                return geojsonLayerGoogle;
-              }
-
-              $(document).ready(function() {
-
-                L.mapbox.accessToken = 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6InRJMHZPZFUifQ.F4DMGoNgU3r2AWLY0Eni-w';
-                map = L.mapbox.map('map-container', 'mapbox.streets')
-                map.setView([37.92686, -96.76757], 4);
-
-                geojsonLayer = getGeojsonLayer();
-                googleGeojsonLayer = GooglegetGeojsonLayer();
-                googleGeojsonLayer.addData(JSON.parse(google_busstops_data))
-                geojsonLayer.addData(JSON.parse(busstops_data));
-                geojsonLayer.addData(JSON.parse(routes_data));
-
-                Layers.push(busstops_data);
-                Layers.push(routes_data);
-
-                map.fitBounds(geojsonLayer.getBounds());
-                map.addLayer(geojsonLayer);
-                map.addLayer(googleGeojsonLayer)
-                geojsonLayer = null;
+                  },
+                  onEachFeature: function(feature, layer) {
+                      if (feature.properties) {
+                          var popupString = '<div class="popup">';
+                          for (var k in feature.properties) {
+                              var v = feature.properties[k];
+                              popupString += k + ': ' + v + '<br />';
+                          }
+                          popupString += '</div>';
+                          layer.bindPopup(popupString, {
+                              maxHeight: 200
+                          });
+                      }
+                  }
               });
+              return geojsonLayer;
+          }
 
+
+
+          $(document).ready(function() {
+
+              L.mapbox.accessToken = 'pk.eyJ1IjoiamNzYW5mb3JkIiwiYSI6InRJMHZPZFUifQ.F4DMGoNgU3r2AWLY0Eni-w';
+              map = L.mapbox.map('map-container', 'mapbox.streets')
+              map.setView([37.92686, -96.76757], 4);
+
+              geojsonLayer = getGeojsonLayer('http://cliparts.co/cliparts/dT4/oLp/dT4oLp7Ec.svg', 30, 50);
+              geojsonLayer.addData(JSON.parse(busstops_data));
+              geojsonLayer.addData(JSON.parse(routes_data));
+              map.addLayer(geojsonLayer);
+
+              googleGeojsonLayer = getGeojsonLayer('http://www.autogari.ro/images/news/9ipRr76iE.png', 20, 20);
+              googleGeojsonLayer.addData(JSON.parse(google_busstops_data))
+
+              map.fitBounds(geojsonLayer.getBounds());
+
+              map.addLayer(googleGeojsonLayer)
+
+          });
 
     </script>
 </body>
