@@ -23,7 +23,7 @@ class Algorithm:
 
         filtered_features = new_features_set1 + new_features_set2
         return filtered_features
-
+:
     @classmethod
     def remove_unintersected_points(self, point_objects, route_objects, buffer_distance=0.0005):
         '''
